@@ -1,10 +1,6 @@
 #include "console.h"
 #include <stdarg.h>
 
-typedef int bool;
-#define true 1
-#define false 0
-
 struct __attribute__((packed)) VideoChar { char c; char color; };
 
 struct VideoChar * video = (struct VideoChar*) 0xb8000;

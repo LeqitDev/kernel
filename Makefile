@@ -1,21 +1,19 @@
 SRCS = $(shell find -name '*.[cS]')
 OBJS = $(addsuffix .o,$(basename $(SRCS)))
 
-CC = gcc
-LD = ld
+ZIGROOT?=/home/felix/software/zig-linux-x86_64-0.5.0
+ZIG=$(ZIGROOT)/zig 
 
-ASFLAGS = -m32
-CFLAGS = -m32 -Wall -Wextra -g -fno-stack-protector -ffreestanding
-LDFLAGS = -melf_i386 -Tkernel.ld -lgcc
+ZFLAGS=-target i386-freestanding-eabi
 
 kernel: $(OBJS)
-	$(LD) $(LDFLAGS) -o $@ $^
+	$(ZIG) build-exe $(ZFLAGS) --name $@ --linker-script kernel.ld $(addprefix --object ,$^)
 
 %.o: %.c
-	$(CC) $(CFLAGS) -c -o $@ $^
+	$(ZIG) cc $(ZFLAGS) -I$(ZIGROOT)/lib/zig/include -Wall -Wextra -g -fno-stack-protector -ffreestanding -c -o $@ $^
 
 %.o: %.S
-	$(CC) $(ASFLAGS) -c -o $@ $^
+	$(ZIG) cc $(ZFLAGS) -c -o $@ $^
 
 clean:
 	rm $(OBJS)
