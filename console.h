@@ -1,7 +1,6 @@
 #ifndef CONSOLE_H
 #define CONSOLE_H
 #include <stddef.h>
-
 #include <stdarg.h>
 #include <stdbool.h>
 
