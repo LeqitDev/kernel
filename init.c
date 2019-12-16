@@ -19,7 +19,7 @@ void init(void)
 	clearScreen();
     char buffer[64] = "12345";
     StringPutBuffer writer = { buffer, 0 };
-    kprintf(stringPutc, &writer, "%L", 0xFFFFFFFFFFFFFFFFFFFFF);
+    kprintf(stringPutc, &writer, "%L", 0xFFFFFFFFFFFFFFFF);
     puts(buffer);
 	/*int numbers[27] = {1, 1, 1, 1, 1, 1, -1, -1, -1, -1, -1, -1, 0, 0, 0, 10, 10, 10, 16, 16, 16, -31, -31, -31, 4294967295, 4294967295, 4294967295};
 	int base[27] = {10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 2, 10, 16, 2, 10, 16, 2, 10, 16, 2, 10, 16, 2, 10, 16};
