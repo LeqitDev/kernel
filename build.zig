@@ -31,8 +31,8 @@ pub fn build(b: *Builder) void {
     const qemu_step = b.addSystemCommand(&[_][]const u8{
         "qemu-system-i386",
         "-kernel",
-        "zig-cache/bin/kernel",
     });
+    qemu_step.addArtifactArg(kernel);
     qemu_step.step.dependOn(&kernel.step);
 
     const run_step = b.step("run", "Run the OS with QEMU");
