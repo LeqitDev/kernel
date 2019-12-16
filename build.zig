@@ -2,7 +2,7 @@ const std = @import("std");
 const builtin = @import("builtin");
 const Builder = @import("std").build.Builder;
 
-const cflags = [_][]const u8{
+const cflags = &[_][]const u8{
     "-Wall",
     "-Wextra",
     "-fno-stack-protector",
@@ -28,11 +28,12 @@ pub fn build(b: *Builder) void {
 
     kernel.install();
 
-    const qemu_step = b.addSystemCommand([_][]const u8{
+    const qemu_step = b.addSystemCommand(&[_][]const u8{
         "qemu-system-i386",
         "-kernel",
         "zig-cache/bin/kernel",
     });
+    qemu_step.step.dependOn(&kernel.step);
 
     const run_step = b.step("run", "Run the OS with QEMU");
     run_step.dependOn(&qemu_step.step);
