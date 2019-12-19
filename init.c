@@ -1,4 +1,5 @@
 #include "console.h"
+#include "DescriptorTable.h"
 
 typedef struct
 {
@@ -17,51 +18,19 @@ static void stringPutc(void * ctx, char c)
 void init(void)
 {
 	clearScreen();
+
+	set_entry(0, 0, 0, 0);
+	set_entry(1, 0, 0x000FFFFF, (GDT_CODE_PL0));
+	set_entry(2, 0, 0x000FFFFF, (GDT_DATA_PL0));
+	set_entry(3, 0, 0x000FFFFF, (GDT_CODE_PL3));
+	set_entry(4, 0, 0x000FFFFF, (GDT_DATA_PL3));
+
+	set_gdt();
+
     char buffer[64] = "12345";
     StringPutBuffer writer = { buffer, 0 };
-    kprintf(stringPutc, &writer, "%L", 0xFFFFFFFFFFFFFFFF);
+    kprintf(stringPutc, &writer, "%Lu", 0xFFFFFFFFFFFFFFFF);
     puts(buffer);
-	/*int numbers[27] = {1, 1, 1, 1, 1, 1, -1, -1, -1, -1, -1, -1, 0, 0, 0, 10, 10, 10, 16, 16, 16, -31, -31, -31, 4294967295, 4294967295, 4294967295};
-	int base[27] = {10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 2, 10, 16, 2, 10, 16, 2, 10, 16, 2, 10, 16, 2, 10, 16};
-	int length[27] = {0, 1, 2, 3, 5, 100, 0, 1, 2, 3, 5, 100, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64};
-    char * numbers_string[27] = {"1", "1", "1", "1", "1", "1", "-1", "-1", "-1", "-1", "-1", "-1", "0", "0", "0", "10", "10", "10", "16", "16", "16", "-31", "-31", "-31", "4294967295", "4294967295", "4294967295"};
-    char * base_string[27] = {"10", "10", "10", "10", "10", "10", "10", "10", "10", "10", "10", "10", "2", "10", "16", "2", "10", "16", "2", "10", "16", "2", "10", "16", "2", "10", "16"};
-    char * length_string[27] = {"0", "1", "2", "3", "5", "100", "0", "1", "2", "3", "5", "100", "64", "64", "64", "64", "64", "64", "64", "64", "64", "64", "64", "64", "64", "64", "64"};
-    char * Digits[27] = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26"};
-    bool single = true;
-    int i = 0;
-    int end = 24;
 
-    if (single == true)
-    {
-        char buff[64] = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
-        NumToString(buff, sizeof(buff), numbers[i], base[i]);
-        newLine();
-        puts(Digits[i]);
-        puts(": ");
-        puts(numbers_string[i]);
-        putc('|');
-        puts(base_string[i]);
-        putc('|');
-        puts(length_string[i]);
-        putc('|');
-        puts(buff);
-        newLine();
-    }
-
-	for (; i < end && single == false; i++)
-    {
-	    char buff[64] = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
-	    NumToString(buff, sizeof(buff), numbers[i], base[i]);
-	    puts(Digits[i]);
-	    puts(": ");
-	    puts(numbers_string[i]);
-	    putc('|');
-        puts(base_string[i]);
-        putc('|');
-        puts(length_string[i]);
-        putc('|');
-	    puts(buff);
-	    newLine();
-    }*/
+	reload_segments();
 }

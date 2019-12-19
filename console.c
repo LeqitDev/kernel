@@ -173,13 +173,10 @@ int unsignedToString(char * buffer, size_t length, unsigned long long num, int b
 
 int signedToString(char * buffer, size_t length, signed long long num, int base)
 {
-    char buff[64] = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
-    if (num < 0) {buffer[0] = '-'; num = -num;}
-    int len = unsignedToString(buff, length, num, base);
-    for (int i = 1; i < len; i++) {
-        buffer[i] = buff[i-1];
-    }
-    len++;
+    int neg = 0;
+    if (num < 0) {buffer[0] = '-'; num = -num; *buffer++; neg++;}
+    int len = unsignedToString(buffer, length, num, base);
+    len += neg;
     return len;
 }
 
