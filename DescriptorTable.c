@@ -2,7 +2,7 @@
 #include "console.h"
 #include "DescriptorTable.h"
 
-#define GDT_ENTRIES 4
+#define GDT_ENTRIES 5
 
 static uint64_t gdt[GDT_ENTRIES];
 
@@ -34,6 +34,6 @@ void reload_segments(void) {
         "mov %ax, %fs\n"
         "mov %ax, %gs\n"
         "mov %ax, %ss\n"
-        "ljmp $0x8, _wait\n"
-        "_wait:");
+        "ljmp $0x8, $_1\n"
+        "_1:");
 }

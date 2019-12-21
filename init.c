@@ -27,10 +27,11 @@ void init(void)
 
 	set_gdt();
 
+    reload_segments();
+
     char buffer[64] = "12345";
     StringPutBuffer writer = { buffer, 0 };
     kprintf(stringPutc, &writer, "%Lu", 0xFFFFFFFFFFFFFFFF);
     puts(buffer);
 
-	reload_segments();
 }
