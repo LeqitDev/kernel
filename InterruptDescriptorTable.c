@@ -9,12 +9,12 @@ struct {
     unsigned int selector : 16;
     unsigned int ist : 3;
     unsigned int _0 : 5;
+    unsigned int type : 3;
+    unsigned int bit : 1;
     unsigned int _1 : 1;
     unsigned int privilege : 2;
     unsigned int enabled : 1;
     unsigned int offset1 : 16;
-    unsigned int type : 3;
-    unsigned int bit : 1;
 } __attribute__((packed)) idt[IDT_ENTRIES];
 
 struct {
@@ -48,7 +48,7 @@ void int_handler(void) {
 }
 
 void init_idt(void) {
-    set_idt_entry(0, (unsigned int) int_handler, 0x08, 0x110b, 1, 0x00, 1);
+    set_idt_entry(0, (unsigned int) int_handler, 0x0a, 0x110b, 1, 0x00, 1);
 
     load_idt();
 }
