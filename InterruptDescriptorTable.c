@@ -13,6 +13,8 @@ struct {
     unsigned int privilege : 2;
     unsigned int enabled : 1;
     unsigned int offset1 : 16;
+    unsigned int type : 3;
+    unsigned int bit : 1;
 } __attribute__((packed)) idt[IDT_ENTRIES];
 
 struct {
@@ -23,13 +25,15 @@ struct {
         .pointer = idt,
 };
 
-void set_idt_entry(int i, unsigned int offset, unsigned int selector, unsigned int privilege, unsigned int enabled) {
+void set_idt_entry(int i, unsigned int offset, unsigned int selector, unsigned int type, unsigned int bit, unsigned int privilege, unsigned int enabled) {
     idt[i].ist = 0;
     idt[i]._0 = 0;
     idt[i]._1 = 0;
     idt[i].offset0 = offset & 0xFFFF;
     idt[i].offset1 = (offset >> 16) & 0xFFFF;
     idt[i].selector = selector;
+    idt[i].type = type;
+    idt[i].bit = bit;
     idt[i].privilege = privilege;
     idt[i].enabled = enabled;
 }
