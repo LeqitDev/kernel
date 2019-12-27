@@ -1,5 +1,6 @@
 #include "console.h"
-#include "DescriptorTable.h"
+#include "GlobalDescriptorTable.h"
+#include "InterruptDescriptorTable.h"
 
 typedef struct
 {
@@ -17,21 +18,15 @@ static void stringPutc(void * ctx, char c)
 
 void init(void)
 {
+    init_gdt();
+    init_idt();
 	clearScreen();
 
-	set_entry(0, 0, 0, 0);
-	set_entry(1, 0, 0x000FFFFF, (GDT_CODE_PL0));
-	set_entry(2, 0, 0x000FFFFF, (GDT_DATA_PL0));
-	set_entry(3, 0, 0x000FFFFF, (GDT_CODE_PL3));
-	set_entry(4, 0, 0x000FFFFF, (GDT_DATA_PL3));
-
-	set_gdt();
-
-    reload_segments();
+    asm volatile("int $0x0");
 
     char buffer[64] = "12345";
     StringPutBuffer writer = { buffer, 0 };
-    kprintf(stringPutc, &writer, "%Lu", 0xFFFFFFFFFFFFFFFF);
+    kprintf(stringPutc, &writer, "%s", "Hello World!1");
     puts(buffer);
 
 }

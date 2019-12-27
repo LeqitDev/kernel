@@ -14,7 +14,8 @@ pub fn build(b: *Builder) void {
 
     kernel.addCSourceFile("init.c", cflags);
     kernel.addCSourceFile("console.c", cflags);
-    kernel.addCSourceFile("DescriptorTable.c", cflags);
+    kernel.addCSourceFile("GlobalDescriptorTable.c", cflags);
+    kernel.addCSourceFile("InterruptDescriptorTable.c", cflags);
     kernel.addAssemblyFile("start.S");
 
     kernel.setBuildMode(mode);
