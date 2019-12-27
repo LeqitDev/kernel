@@ -48,6 +48,7 @@ void int_handler(void) {
 }
 
 void init_idt(void) {
+    set_idt_entry(0, (unsigned int) int_handler, 0x08, 0x110b, 1, 0x00, 1);
 
     load_idt();
 }
