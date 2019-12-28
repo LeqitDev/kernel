@@ -15,5 +15,6 @@ extern int unsignedToString(char * buffer, size_t length, unsigned long long num
 extern int signedToString(char * buffer, size_t length, signed long long num, int base);
 
 extern void kprintf(void (*put)(void * ctx, char c), void * ctx, char const * fmt, ...);
+extern void printf(char * buffer, char const * fmt, ...);
 
 #endif
