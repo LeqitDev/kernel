@@ -115,7 +115,9 @@ struct cpu_state {
 void handle_interrupt(struct cpu_state* cpu)
 {
     if (cpu->intr <= 0x1f) {
-        kprintf("Exception %L, Kernel angehalten!\n", cpu->intr);
+        char buffer[64] = "XXX";
+        printf("Exception %L, Kernel angehalten!\n", cpu->intr);
+        putc(buffer);
 
         // Hier den CPU-Zustand ausgeben
 
