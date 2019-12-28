@@ -17,6 +17,7 @@ pub fn build(b: *Builder) void {
     kernel.addCSourceFile("GlobalDescriptorTable.c", cflags);
     kernel.addCSourceFile("InterruptDescriptorTable.c", cflags);
     kernel.addAssemblyFile("start.S");
+    kernel.addAssemblyFile("intr.S");
 
     kernel.setBuildMode(mode);
     kernel.setLinkerScriptPath("kernel.ld");

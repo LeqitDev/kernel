@@ -116,7 +116,7 @@ void handle_interrupt(struct cpu_state* cpu)
 {
     if (cpu->intr <= 0x1f) {
         char buffer[64] = "XXX";
-        printf(buffer, "Exception %L, Kernel angehalten!\n", cpu->intr);
+        printf(buffer, "Exception %i, Kernel angehalten!\n", cpu->intr);
         puts(buffer);
 
         // Hier den CPU-Zustand ausgeben
@@ -143,6 +143,31 @@ void load_idt(void) {
 
 void init_idt(void) {
     init_pic();
+
+    set_idt_entry(0, (unsigned int) intr_stub_0, 0x8, 0x6, 1, 0x00, 1);
+    set_idt_entry(1, (unsigned int) intr_stub_1, 0x8, 0x6, 1, 0x00, 1);
+    set_idt_entry(2, (unsigned int) intr_stub_2, 0x8, 0x6, 1, 0x00, 1);
+    set_idt_entry(3, (unsigned int) intr_stub_3, 0x8, 0x6, 1, 0x00, 1);
+    set_idt_entry(4, (unsigned int) intr_stub_4, 0x8, 0x6, 1, 0x00, 1);
+    set_idt_entry(5, (unsigned int) intr_stub_5, 0x8, 0x6, 1, 0x00, 1);
+    set_idt_entry(6, (unsigned int) intr_stub_6, 0x8, 0x6, 1, 0x00, 1);
+    set_idt_entry(7, (unsigned int) intr_stub_7, 0x8, 0x6, 1, 0x00, 1);
+    set_idt_entry(8, (unsigned int) intr_stub_8, 0x8, 0x6, 1, 0x00, 1);
+    set_idt_entry(9, (unsigned int) intr_stub_9, 0x8, 0x6, 1, 0x00, 1);
+    set_idt_entry(10, (unsigned int) intr_stub_10, 0x8, 0x6, 1, 0x00, 1);
+    set_idt_entry(11, (unsigned int) intr_stub_11, 0x8, 0x6, 1, 0x00, 1);
+    set_idt_entry(12, (unsigned int) intr_stub_12, 0x8, 0x6, 1, 0x00, 1);
+    set_idt_entry(13, (unsigned int) intr_stub_13, 0x8, 0x6, 1, 0x00, 1);
+    set_idt_entry(14, (unsigned int) intr_stub_14, 0x8, 0x6, 1, 0x00, 1);
+    set_idt_entry(15, (unsigned int) intr_stub_15, 0x8, 0x6, 1, 0x00, 1);
+    set_idt_entry(16, (unsigned int) intr_stub_16, 0x8, 0x6, 1, 0x00, 1);
+    set_idt_entry(17, (unsigned int) intr_stub_17, 0x8, 0x6, 1, 0x00, 1);
+    set_idt_entry(18, (unsigned int) intr_stub_18, 0x8, 0x6, 1, 0x00, 1);
+
+    set_idt_entry(32, (unsigned int) intr_stub_32, 0x8, 0x6, 1, 0x00, 1);
+    set_idt_entry(33, (unsigned int) intr_stub_33, 0x8, 0x6, 1, 0x00, 1);
+
+    set_idt_entry(48, (unsigned int) intr_stub_48, 0x8, 0x6, 1, 0x00, 1);
 
     load_idt();
 }
