@@ -1,6 +1,6 @@
 #include <stdint.h>
-#include "console.h"
-#include "GlobalDescriptorTable.h"
+#include "include/console.h"
+#include "include/GlobalDescriptorTable.h"
 
 #define GDT_ENTRIES 5
 

@@ -1,6 +1,6 @@
 #include <stdint.h>
-#include "InterruptDescriptorTable.h"
-#include "console.h"
+#include "include/InterruptDescriptorTable.h"
+#include "include/console.h"
 
 #define IDT_KERNEL_CODE_SEGMENT 0x80
 #define IDT_RING_0 0x00
@@ -68,9 +68,15 @@ void set_idt_entry(int i, unsigned int offset, unsigned int selector, unsigned i
     idt[i].enabled = enabled;
 }
 
-static inline void outb(uint16_t port, uint8_t data)
+void outb(uint16_t port, uint8_t data)
 {
     asm volatile ("outb %0, %1" : : "a" (data), "Nd" (port));
+}
+
+unsigned char inb(uint16_t port) {
+    unsigned char result;
+    asm volatile("inb %1, %0" : "=a" (result) : "Nd" (port));
+    return result;
 }
 
 void init_pic(void) {
@@ -127,6 +133,10 @@ void handle_interrupt(struct cpu_state* cpu)
         }
     } else {
         if (cpu->intr >= 0x20 && cpu->intr <= 0x2f) {
+            if (cpu->intr == 0x20) {
+                //IRQ
+                puts("\nKeyboardInterrupt");
+            }
             if (cpu->intr >= 0x28) {
                 outb(0xa0, 0x20);
             }
@@ -136,9 +146,8 @@ void handle_interrupt(struct cpu_state* cpu)
 }
 
 void load_idt(void) {
-    asm volatile("lidt %0" : : "m" (idtp));
 
-    asm volatile("sti");
+    asm volatile("lidt %0" : : "m" (idtp));
 }
 
 void init_idt(void) {

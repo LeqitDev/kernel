@@ -1,4 +1,4 @@
-#include "console.h"
+#include "include/console.h"
 #include <stdarg.h>
 
 struct __attribute__((packed)) VideoChar { char c; char color; };
@@ -113,6 +113,9 @@ int unsignedToString(char * buffer, size_t length, unsigned long long num, int b
     if(num == 0)
     {
         buffer[0] = Digits[0];
+        len++;
+        buffer[len] = '\0';
+        return len;
     }
 
     for (len = 0; num > 0; len++)
