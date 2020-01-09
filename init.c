@@ -9,6 +9,8 @@ void init(void)
     init_gdt();
     init_idt();
 
+    displaycursor(x, y);
+
     char buffer[64] = "XXXX";
     printf(buffer, "%s", "Hello World!");
     puts(buffer);
