@@ -107,7 +107,9 @@ char handle_keys(int keycode) {
     if (keycode >= 32 && keycode <= 255) character = keycode;
     else if (keycode == KEY_CODE_TABULATOR) character = '\t';
     else if (keycode == KEY_CODE_ENTER) {
-        proccedCommand(getLine(y));
+        char Buff[80] = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
+        getLine(Buff, y);
+        proccedCommand(Buff);
         character = '\n';
     }
     else if (keycode == KEY_CODE_BACKSPACE) character = '\b';

@@ -184,16 +184,12 @@ void scroll(void)
 	displaycursor(x, y);
 }
 
-char * getLine(int row) {
-    char string[80] = "X";
+void getLine(char * line, int row) {
     int col = 0;
     for (col = 0; col < 80; col++) {
-        if (video[col + 80 * row].c != 0) {
-            string[col] = video[col + 80 * row].c;
-        }
+        line[col] = video[col + 80 * row].c;
     }
-    string[col] = '\0';
-    return (char *) string;
+    line[col] = '\0';
 }
 
 int strlen(char * string) {
@@ -221,13 +217,14 @@ int contains(char * string, char * searchkey) {
 
 int charinstring(char * string, char character) {
     int position = 0;
-    while (*string != '\0') {
-        /*if (*string == character) {
-            putc('T');
-            return position;
-        }*/
-        string++;
-        position++;
+    while (*string) {
+        if (*string != 0) {
+            if (*string == character) {
+                return position;
+            }
+            string++;
+            position++;
+        }
     }
     return 0;
 }

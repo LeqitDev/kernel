@@ -28,7 +28,7 @@ extern void clearScreen(void);
 
 extern void puts(const char * string);
 extern void newLine();
-extern char * getLine(int row);
+extern void getLine(char * line, int row);
 extern void putc(char c);
 extern void scroll();
 
