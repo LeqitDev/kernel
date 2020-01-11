@@ -221,12 +221,11 @@ int contains(char * string, char * searchkey) {
 
 int charinstring(char * string, char character) {
     int position = 0;
-    putc('T');
-    while (*string) {
-        if (*string == character) {
+    while (*string != '\0') {
+        /*if (*string == character) {
             putc('T');
             return position;
-        }
+        }*/
         string++;
         position++;
     }
