@@ -3,17 +3,33 @@
 
 
 void proccedCommand(char * line) {
+    putc('\n');
     if (contains(line, "echo")) {
-        if (charinstring(line, '"')) {
+        int msgpos = charinstring(line, ' ');
+        if (msgpos) {
+            for (int i = 0; i < msgpos; i++) { line++;}
             puts(line);
-//            putc(charinstring(line, '"'));
-//            for (int i = 0; i < charinstring(line, '"'); i++) { line++; putc(*line); }
-//            puts(line);
         } else {
-            puts("Try help");
+            puts("Try ");
+            setTextColor(CONSOLE_COLOR_GREEN);
+            puts("help");
         }
+    } else if (contains(line, "help")) {
+        puts("---------------------------------[Help]---------------------------------\n");
+        puts("- echo [message]                                                       -\n");
+        puts("---------------------------------[End]----------------------------------\n");
     } else {
-        puts("No echo");
+        int msgpos = charinstring(line, ' ');
+        if (msgpos) {
+            for (int i = 0; i < msgpos; i++) { putc(line[i]); }
+        } else {
+            puts(line);
+        }
+        puts("isn't a command!\n");
+        puts("Please try ");
+        setTextColor(CONSOLE_COLOR_GREEN);
+        puts("help");
     }
+    return;
 }
 

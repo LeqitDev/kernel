@@ -192,7 +192,7 @@ void getLine(char * line, int row) {
     line[col] = '\0';
 }
 
-int strlen(char * string) {
+int strlen(char const * string) {
     int length = 0;
     while (*string) {
         string++;
@@ -201,29 +201,33 @@ int strlen(char * string) {
     return length;
 }
 
-int contains(char * string, char * searchkey) {
+int contains(char const * string, char * searchkey) {
     int character = 0;
     while (*string) {
-        if (*string != 0 && character < strlen(searchkey)) {
-            if (*string == searchkey[character]) {
-                character++;
+        if (*string != 0) {
+            if (character < strlen(searchkey)) {
+                if (*string == searchkey[character]) {
+                    character++;
+                }
+                string++;
             }
-            string++;
+            if (character == strlen(searchkey)) {
+                return character;
+            }
         }
     }
-    if (character == strlen(searchkey)) return character;
-    else return 0;
+    return 0;
 }
 
-int charinstring(char * string, char character) {
+int charinstring(char const * string, char character) {
     int position = 0;
     while (*string) {
         if (*string != 0) {
+            position++;
             if (*string == character) {
                 return position;
             }
             string++;
-            position++;
         }
     }
     return 0;

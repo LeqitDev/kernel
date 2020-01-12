@@ -32,9 +32,9 @@ extern void getLine(char * line, int row);
 extern void putc(char c);
 extern void scroll();
 
-extern int strlen(char * string);
-extern int contains(char * string, char * searchkey);
-extern int charinstring(char * string, char character);
+extern int strlen(char const * string);
+extern int contains(char const * string, char * searchkey);
+extern int charinstring(char const * string, char character);
 
 extern void setBgColor(int hexColorCode);
 extern void setTextColor(int hexColorCode);
