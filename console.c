@@ -233,6 +233,20 @@ int charinstring(char const * string, char character) {
     return 0;
 }
 
+/*int compareStrings(char * string1, char * string2) {
+    int ret = 0;
+    while (*string1) {
+        if (*string1 == *string2) {
+            string2++;
+            ret++;
+        } else {
+            string2 = 0;
+            ret = 0;
+        }
+    }
+    return ret;
+}*/
+
 int unsignedToString(char * buffer, size_t length, unsigned long long num, int base)
 {
     //unsigned funktion: Minuswerte nicht mitinbegriffen: nur positive Werte
@@ -446,7 +460,6 @@ int genprintf(void (*put)(void * ctx, char c), void * ctx, char const * fmt, va_
                 char c = va_arg(ArgList, int);
                 if (put != NULL) put(ctx, c);
                 len++;
-                put(ctx, '\0');
             }
             else if (*fmt == 's')
             {
@@ -459,7 +472,6 @@ int genprintf(void (*put)(void * ctx, char c), void * ctx, char const * fmt, va_
                     if (put != NULL) put(ctx, Buff[i]);
                 }
                 len += i - 1; //länge des neuen strings zu normalen länge hinzufügen
-                put(ctx, '\0'); //string-end-code setzten
             }
         }
         else
@@ -469,6 +481,7 @@ int genprintf(void (*put)(void * ctx, char c), void * ctx, char const * fmt, va_
             fmt++;
         }
     }
+    put(ctx, '\0');
     return len; //die länge des gesamten string zurückgeben und aus der funktion herausgehen
 }
 
@@ -488,4 +501,15 @@ void printf(char * buffer, char const * fmt, ...) {
     StringPutBuffer writer = { buffer, 0 };
     genprintf(stringPutc, &writer, fmt, vaList);
     va_end(vaList);
+}
+
+void println(char const * fmt, ...) {
+    va_list vaList;
+    va_start(vaList, fmt);
+    char buffer[80] = "XXXXXX";
+    StringPutBuffer writer = { buffer, 0 };
+    genprintf(stringPutc, &writer, fmt, vaList);
+    va_end(vaList);
+    puts(buffer);
+    putc('\n');
 }

@@ -35,6 +35,7 @@ extern void scroll();
 extern int strlen(char const * string);
 extern int contains(char const * string, char * searchkey);
 extern int charinstring(char const * string, char character);
+//extern int compareStrings(char * string1, char * string2);
 
 extern void setBgColor(int hexColorCode);
 extern void setTextColor(int hexColorCode);
@@ -45,5 +46,6 @@ extern int signedToString(char * buffer, size_t length, signed long long num, in
 
 extern void kprintf(void (*put)(void * ctx, char c), void * ctx, char const * fmt, ...);
 extern void printf(char * buffer, char const * fmt, ...);
+extern void println(char const * fmt, ...);
 
 #endif
