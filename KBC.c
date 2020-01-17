@@ -108,7 +108,7 @@ char handle_keys(int keycode) {
     else if (keycode == KEY_CODE_TABULATOR) character = '\t';
     else if (keycode == KEY_CODE_ENTER) {
         char Buff[80] = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
-        getLine(Buff, y);
+        getLine(Buff, Y_CURSOR_POS);
         proccedCommand(Buff);
         character = '\n';
     }

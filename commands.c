@@ -1,8 +1,7 @@
 #include "include/console.h"
 #include "include/commands.h"
 
-
-void parseLine(const char * line, char * args[80]) {
+void parseLine(const char * line, char * args[]) {
     int i = 0;
     int argspos[40] = {0};
     char argsinstring[80] = "XXX";
@@ -25,9 +24,17 @@ void parseLine(const char * line, char * args[80]) {
     }
 }
 
+int argslen(char * args[], int maxlength) {
+    int len = 0;
+    for (int i = 0; i < maxlength; i++) {
+        if (args[i] != 0) len++;
+    }
+    return len;
+}
+
 void proccedCommand(char * line) {
     putc('\n');
-    char const * args[80] = {"XXXX"};
+    char * args[80] = {"XXXX"};
     parseLine(line, args);
     if (contains(args[0], "echo")) {
         if (args[1] != 0) {
@@ -46,6 +53,26 @@ void proccedCommand(char * line) {
         println("---------------------------------[Help]---------------------------------");
         println("- echo [message]                      | Schreibe etwas in die Konsole  -");
         println("---------------------------------[End]----------------------------------");
+    } else if (contains(args[0], "add")) {
+        int x = strtoint(args[1]);
+        int y = strtoint(args[2]);
+        if (args[3] != 0) println("%s %i", args[3], x + y);
+        else println("%i", x + y);
+    } else if (contains(args[0], "sub")) {
+        int x = strtoint(args[1]);
+        int y = strtoint(args[2]);
+        if (args[3] != 0) println("%s %i", args[3], x - y);
+        else println("%i", x - y);
+    } else if (contains(args[0], "mul")) {
+        int x = strtoint(args[1]);
+        int y = strtoint(args[2]);
+        if (args[3] != 0) println("%s %i", args[3], x * y);
+        else println("%i", x * y);
+    } else if (contains(args[0], "div")) {
+        int x = strtoint(args[1]);
+        int y = strtoint(args[2]);
+        if (args[3] != 0) println("%s %i", args[3], x / y);
+        else println("%i", x / y);
     } else {
         println("%s ist kein gueltiger Command.", args[0]);
         puts("Probiere ");

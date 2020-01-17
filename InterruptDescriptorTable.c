@@ -2,6 +2,7 @@
 #include "include/InterruptDescriptorTable.h"
 #include "include/console.h"
 #include "include/KBC.h"
+#include "include/Tasks.h"
 
 //TODO: Kommentare vervollständigen
 
@@ -170,31 +171,11 @@ void irq_handler() {
     //Nach erfolgreichen Tests, könnte eine send_key_event Funtkion wie bei Týndur verwendet werden
 }
 
-struct cpu_state {
-    // Von Hand gesicherte Register
-    uint32_t   eax;
-    uint32_t   ebx;
-    uint32_t   ecx;
-    uint32_t   edx;
-    uint32_t   esi;
-    uint32_t   edi;
-    uint32_t   ebp;
-
-    uint32_t   intr;
-    uint32_t   error;
-
-    // Von der CPU gesichert
-    uint32_t   eip;
-    uint32_t   cs;
-    uint32_t   eflags;
-    uint32_t   esp;
-    uint32_t   ss;
-};
-
-void handle_interrupt(struct cpu_state* cpu)
+struct cpu_state* handle_interrupt(struct cpu_state* cpu)
 {
+    struct cpu_state* new_cpu = cpu;
     if (cpu->intr <= 0x1f) {
-        char buffer[64] = "XXX";
+        char buffer[64] = "X";
         printf(buffer, "Exception %i, Kernel angehalten!\n", cpu->intr);
         puts(buffer);
 
@@ -206,6 +187,9 @@ void handle_interrupt(struct cpu_state* cpu)
         }
     } else {
         if (cpu->intr >= 0x20 && cpu->intr <= 0x2f) {
+            if (cpu->intr == 0x20) {
+                new_cpu = schedule(cpu);
+            }
             if (cpu->intr == 0x21) {
                 //IRQ
                 irq_handler();
@@ -216,6 +200,7 @@ void handle_interrupt(struct cpu_state* cpu)
             outb(0x20, 0x20);
         }
     }
+    return new_cpu;
 }
 
 void load_idt(void) {

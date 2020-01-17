@@ -21,8 +21,8 @@
 #define CONSOLE_COLOR_YELLOW        0xE
 #define CONSOLE_COLOR_WHITE         0xF
 
-extern int x;
-extern int y;
+extern int X_CURSOR_POS;
+extern int Y_CURSOR_POS;
 
 extern void clearScreen(void);
 
@@ -35,7 +35,7 @@ extern void scroll();
 extern int strlen(char const * string);
 extern int contains(char const * string, char * searchkey);
 extern int charinstring(char const * string, char character);
-//extern int compareStrings(char * string1, char * string2);
+extern int strtoint(char * string);
 
 extern void setBgColor(int hexColorCode);
 extern void setTextColor(int hexColorCode);
@@ -47,5 +47,6 @@ extern int signedToString(char * buffer, size_t length, signed long long num, in
 extern void kprintf(void (*put)(void * ctx, char c), void * ctx, char const * fmt, ...);
 extern void printf(char * buffer, char const * fmt, ...);
 extern void println(char const * fmt, ...);
+extern void print(char const * fmt, ...);
 
 #endif

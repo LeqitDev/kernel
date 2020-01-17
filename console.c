@@ -1,14 +1,15 @@
 #include "include/console.h"
 #include "include/InterruptDescriptorTable.h"
 #include <stdarg.h>
+#include <stdint.h>
 
 struct __attribute__((packed)) VideoChar { char c; char color; }; //Videochar struct um text einfacher zum *wirklichen* Videochar hinzuzufügen
 
 struct VideoChar * video = (struct VideoChar*) 0xb8000; //Der video speicher
 int backgroundColor = CONSOLE_COLOR_BLACK; //setzten der (generellen) Hintergrundfarbe
 int textColor = CONSOLE_COLOR_WHITE; //setzten der (generellen) Textfarbe
-int x = 0; //x-position
-int y = 0; //y-position
+int X_CURSOR_POS = 0; //x-p// osition
+int Y_CURSOR_POS = 0; //y-position
 
 typedef struct
 {
@@ -50,12 +51,12 @@ void clearScreen(void)
 
 void displaycursor(int col, int row)
 {
-    int tmp;
-    tmp = row * 80 + col;
-    outb(0x3D4,14);
-    outb(0x3D5,tmp >> 8);
-    outb(0x3D4,15);
-    outb(0x3D5,tmp);
+    uint16_t tmp;
+    tmp = col + row * 80;
+    outb(0x3D4, 0x0F);
+    outb(0x3D5, (uint8_t) (tmp & 0xFF));
+    outb(0x3D4, 0x0E);
+    outb(0x3D5, (uint8_t) ((tmp >> 8) & 0xFF));
 }
 
 void puts(const char * string)
@@ -68,34 +69,33 @@ void puts(const char * string)
             i++;
             newLine();
 	    } else if (string[i] == '\b') {
-	        //TODO: zum nächsten text springen
 	        i++;
-            if (x == 0 && y > 0) {
-                x = 79;
-                y--;
-            } else if (x > 0) {
-                x--;
+            if (X_CURSOR_POS == 0 && Y_CURSOR_POS > 0) {
+                X_CURSOR_POS = 79;
+                Y_CURSOR_POS--;
+            } else if (X_CURSOR_POS > 0) {
+                X_CURSOR_POS--;
             }
-	        while (video[x + 80 * y].c == 0 && y >= 0) {
-                if (x == 0 && y > 0) {
-                    x = 79;
-                    y--;
-                } else if (x > 0) {
-                    x--;
+	        while (video[X_CURSOR_POS + 80 * Y_CURSOR_POS].c == 0 && Y_CURSOR_POS >= 0) {
+                if (X_CURSOR_POS == 0 && Y_CURSOR_POS > 0) {
+                    X_CURSOR_POS = 79;
+                    Y_CURSOR_POS--;
+                } else if (X_CURSOR_POS > 0) {
+                    X_CURSOR_POS--;
                 }
 	        }
 	        struct VideoChar vchar;
 	        vchar.c = 0;
 	        vchar.color = 0x00;
 
-	        video[x + 80 * y] = vchar;
+	        video[X_CURSOR_POS + 80 * Y_CURSOR_POS] = vchar;
 	    } else if (string[i] == '\t') {
             struct VideoChar vchar;
             vchar.c = ' ';
             vchar.color = 0x00;
-            for (int i = 0; i < 5 && x < 80; ++i) {
-                video[x + 80 * y] = vchar;
-                x++;
+            for (int i = 0; i < 5 && X_CURSOR_POS < 80; ++i) {
+                video[X_CURSOR_POS + 80 * Y_CURSOR_POS] = vchar;
+                X_CURSOR_POS++;
             }
 	    } else {
 	        //sonst normale Ausgabe
@@ -103,14 +103,14 @@ void puts(const char * string)
             vchar.c = string[i]; //Char setzten
             vchar.color = getColor(); //Farbe des char hintergrundes und des chars an sich setzten
 
-            video[x + 80 * y] = vchar; //25 Zeilen 80 Spalten. y++ cursor +80 = neue Zeile
+            video[X_CURSOR_POS + 80 * Y_CURSOR_POS] = vchar; //25 Zeilen 80 Spalten. y++ cursor +80 = neue Zeile
 
-            x++; //X erhöhen
-            if (x >= 80) newLine(); //Wenn x größer als die max. Spalten dann neue Zeile
+            X_CURSOR_POS++; //X erhöhen
+            if (X_CURSOR_POS >= 80) newLine(); //Wenn x größer als die max. Spalten dann neue Zeile
 	    }
+        displaycursor(X_CURSOR_POS, Y_CURSOR_POS);
 	}
-	displaycursor(x, y);
-	if (y == 24 || x / 80 >= 24) //Wenn ganz unten angekommen muss nach oben gescrollt werden.
+	if (Y_CURSOR_POS == 24) //Wenn ganz unten angekommen muss nach oben gescrollt werden.
 		scroll();
 }
 
@@ -118,35 +118,35 @@ void putc(char c)
 {
     //Char schreiben & direkt nach Backslash-Codes abfragen da nicht mehrere chars vorhanden sind
     if (c == '\n') {
-        y++;
-        x = 0;
+        Y_CURSOR_POS++;
+        X_CURSOR_POS = 0;
     } else if (c == '\b') {
-        if (x == 0 && y > 0) {
-            x = 79;
-            y--;
-        } else if (x > 0) {
-            x--;
+        if (X_CURSOR_POS == 0 && Y_CURSOR_POS > 0) {
+            X_CURSOR_POS = 79;
+            Y_CURSOR_POS--;
+        } else if (X_CURSOR_POS > 0) {
+            X_CURSOR_POS--;
         }
-        while (video[x + 80 * y].c == 0 && y >= 0) {
-            if (x == 0 && y > 0) {
-                x = 79;
-                y--;
-            } else if (x > 0) {
-                x--;
+        while (video[X_CURSOR_POS + 80 * Y_CURSOR_POS].c == 0 && Y_CURSOR_POS >= 0) {
+            if (X_CURSOR_POS == 0 && Y_CURSOR_POS > 0) {
+                X_CURSOR_POS = 79;
+                Y_CURSOR_POS--;
+            } else if (X_CURSOR_POS > 0) {
+                X_CURSOR_POS--;
             }
         }
         struct VideoChar vchar;
         vchar.c = 0;
         vchar.color = 0x00;
 
-        video[x + 80 * y] = vchar;
+        video[X_CURSOR_POS + 80 * Y_CURSOR_POS] = vchar;
     } else if (c == '\t') {
         struct VideoChar vchar;
         vchar.c = ' ';
         vchar.color = 0x00;
-        for (int i = 0; i < 5 && x < 80; ++i) {
-            video[x + 80 * y] = vchar;
-            x++;
+        for (int i = 0; i < 5 && X_CURSOR_POS < 80; ++i) {
+            video[X_CURSOR_POS + 80 * Y_CURSOR_POS] = vchar;
+            X_CURSOR_POS++;
         }
     } else {
         //ansonsten einen char ausgeben
@@ -154,20 +154,19 @@ void putc(char c)
         vchar.c = c;
         vchar.color = getColor();
 
-        video[x + 80 * y] = vchar; //Char in den Videospeicher abspeichern
+        video[X_CURSOR_POS + 80 * Y_CURSOR_POS] = vchar; //Char in den Videospeicher abspeichern
 
-        x++; //X erhöhen für den nächsten char
+        X_CURSOR_POS++; //X erhöhen für den nächsten char
     }
-    displaycursor(x, y);
-    if (y == 24 || x / 80 >= 24) //Wenn ganz unten angekommen muss nach oben gescrollt werden.
+    displaycursor(X_CURSOR_POS, Y_CURSOR_POS);
+    if (Y_CURSOR_POS == 24 || X_CURSOR_POS / 80 >= 24) //Wenn ganz unten angekommen muss nach oben gescrollt werden.
         scroll();
 }
 
 void newLine()
 {
-    y++; //Y erhöhen für nächste zeile
-    x = 0; //X auf 0 setzten damit man an dem linien anfang anfängt zu schreiben
-    displaycursor(x, y);
+    Y_CURSOR_POS++; //Y erhöhen für nächste zeile
+    X_CURSOR_POS = 0; //X auf 0 setzten damit man an dem linien anfang anfängt zu schreiben
 }
 
 void scroll(void)
@@ -179,9 +178,8 @@ void scroll(void)
 			video[x + 80 * y] = video[x + 80 * (y + 1)]; // alles eine zeile höher schieben
 		}
 	}
-	x = 0; //X wieder auf zeilen anfang setzten
-	y--; //Y von 26 (außerhalb des Bildschirms) auf 25 setzten (neue zeile da alle zeilen auf eine darüber gesetzt wurden)
-	displaycursor(x, y);
+	X_CURSOR_POS = 0; //X wieder auf zeilen anfang setzten
+	Y_CURSOR_POS--; //Y von 26 (außerhalb des Bildschirms) auf 25 setzten (neue zeile da alle zeilen auf eine darüber gesetzt wurden)
 }
 
 void getLine(char * line, int row) {
@@ -233,19 +231,30 @@ int charinstring(char const * string, char character) {
     return 0;
 }
 
-/*int compareStrings(char * string1, char * string2) {
-    int ret = 0;
-    while (*string1) {
-        if (*string1 == *string2) {
-            string2++;
-            ret++;
-        } else {
-            string2 = 0;
-            ret = 0;
-        }
+int strtoint(char * string) {
+    int position = 1;
+    int integer = 0;
+
+    for (int x = 0; x < strlen(string)/2; x++)
+    {
+        //Den string drehen bisher z.B. 004 danach sollte dann 400 herauskommen
+        char temp = string[x]; //temporärer speicher für die drehung
+        string[x] = string[strlen(string)-x-1]; //zahl tauschen
+        string[strlen(string)-x-1] = temp; //getauschte zahl mit der aus dem temp. speicher tauschen
     }
-    return ret;
-}*/
+
+    while (*string) {
+        if (*string >= '0' && *string <= '9') {
+            integer += (*string - '0') * position;
+            position *= 10;
+        } else {
+            break;
+        }
+        string++;
+    }
+
+    return integer;
+}
 
 int unsignedToString(char * buffer, size_t length, unsigned long long num, int base)
 {
@@ -506,10 +515,20 @@ void printf(char * buffer, char const * fmt, ...) {
 void println(char const * fmt, ...) {
     va_list vaList;
     va_start(vaList, fmt);
-    char buffer[80] = "XXXXXX";
+    char buffer[80] = "X";
     StringPutBuffer writer = { buffer, 0 };
     genprintf(stringPutc, &writer, fmt, vaList);
     va_end(vaList);
     puts(buffer);
     putc('\n');
+}
+
+void print(char const * fmt, ...) {
+    va_list vaList;
+    va_start(vaList, fmt);
+    char buffer[80] = "X";
+    StringPutBuffer writer = { buffer, 0 };
+    genprintf(stringPutc, &writer, fmt, vaList);
+    va_end(vaList);
+    puts(buffer);
 }
