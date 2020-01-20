@@ -5,11 +5,15 @@
 
 
 void task_a(void) {
-    println("A");
+    while (1) {
+        puts("A");
+    }
 }
 
 void task_b(void) {
-    println("B");
+    while (1) {
+        puts("B");
+    }
 }
 
 static uint8_t stack_a[4096];
@@ -31,7 +35,7 @@ struct cpu_state* init_task(uint8_t* stack, void* entry) {
             .eflags = 0x202,
     };
 
-    struct cpu_state* state = (void*) (state + 4096 - sizeof(new_state));
+    struct cpu_state* state = (void*) (stack + 4096 - sizeof(new_state));
     *state = new_state;
 
     return state;

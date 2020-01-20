@@ -9,4 +9,6 @@
 
 struct cpu_state* schedule(struct cpu_state* cpu);
 
+void init_multitasking(void);
+
 #endif //TASKS_H

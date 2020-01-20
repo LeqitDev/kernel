@@ -18,6 +18,7 @@ pub fn build(b: *Builder) void {
     kernel.addCSourceFile("InterruptDescriptorTable.c", cflags);
     kernel.addCSourceFile("KBC.c", cflags);
     kernel.addCSourceFile("commands.c", cflags);
+    kernel.addCSourceFile("tasks.c", cflags);
     kernel.addAssemblyFile("start.S");
     kernel.addAssemblyFile("intr.S");
 
