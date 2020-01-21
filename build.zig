@@ -6,6 +6,7 @@ const cflags = &[_][]const u8{
     "-Wall",
     "-Wextra",
     "-fno-stack-protector",
+    "-fno-omit-frame-pointer",
 };
 
 pub fn build(b: *Builder) void {
@@ -19,6 +20,7 @@ pub fn build(b: *Builder) void {
     kernel.addCSourceFile("KBC.c", cflags);
     kernel.addCSourceFile("commands.c", cflags);
     kernel.addCSourceFile("tasks.c", cflags);
+    kernel.addCSourceFile("debug.c", cflags);
     kernel.addAssemblyFile("start.S");
     kernel.addAssemblyFile("intr.S");
 
