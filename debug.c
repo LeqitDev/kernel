@@ -4,21 +4,20 @@
 
 struct StackFrame {
     struct StackFrame* prev;
-    long eip;
+    unsigned int eip;
 };
 
 void panic_message() {
     println("An error occurred: ");
 
-    struct StackFrame* frame;
-    int i = 1;
+    struct StackFrame* frame = 0;
+    int i = 0;
 
     asm("mov %%ebp, %0" : "=r"(frame));
 
-    while (frame) {
-        println("%i 0x{0:16} : %Lu", i, frame->eip);
+    while (frame->eip != 0) {
+        println("%i: %hu", i, frame->eip);
+        frame = frame->prev;
         i++;
-        if (frame->prev != frame) frame = 0;
-        else frame = frame->prev;
     }
 }
