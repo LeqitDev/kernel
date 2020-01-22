@@ -22,9 +22,6 @@ _start:
     // Stack initialisieren
     mov $kernel_stack, %esp
 
-    //Ebp wird zu NULL stack weiß, wenn er unten angekommen ist
-    xor %ebp, %ebp
-
     // C-Code aufrufen
     call init
 

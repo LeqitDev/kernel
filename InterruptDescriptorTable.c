@@ -176,12 +176,12 @@ struct cpu_state* handle_interrupt(struct cpu_state* cpu)
 {
     struct cpu_state* new_cpu = cpu;
     if (cpu->intr <= 0x1f) {
-        panic_message();
+        panic_message(cpu->ebp);
         char buffer[64] = "X";
         printf(buffer, "Exception %i, Kernel angehalten! [%i]\n", cpu->intr, cpu->error);
         puts(buffer);
 
-        //println("cs: %i,\n eax: %i,\n ebp: %i,\n ebx: %i,\n ecx: %i,\n edi: %i,\n edx: %i,\n eip: %i,\n esi: %i,\n esp: %i,\n ss: %i,\n eflags: %i", cpu->cs, cpu->eax, cpu->ebp, cpu->ebx, cpu->ecx, cpu->edi, cpu->edx, cpu->eip, cpu->esi, cpu->esp, cpu->ss, cpu->eflags);
+        println("cs: %i,\n eax: %i,\n ebp: %i,\n ebx: %i,\n ecx: %i,\n edi: %i,\n edx: %i,\n eip: %i,\n esi: %i,\n esp: %i,\n ss: %i,\n eflags: %i", cpu->cs, cpu->eax, cpu->ebp, cpu->ebx, cpu->ecx, cpu->edi, cpu->edx, cpu->eip, cpu->esi, cpu->esp, cpu->ss, cpu->eflags);
 
         // Hier den CPU-Zustand ausgeben
 

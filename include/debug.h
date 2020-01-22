@@ -5,6 +5,8 @@
 #ifndef DEBUG_H
 #define DEBUG_H
 
-void panic_message();
+#include <stdint.h>
+
+void panic_message(uint32_t ebp);
 
 #endif //DEBUG_H

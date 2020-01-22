@@ -1,23 +1,26 @@
 #include "include/console.h"
 #include "include/debug.h"
+#include <stdint.h>
 
 
 struct StackFrame {
-    struct StackFrame* prev;
-    unsigned int eip;
+    struct StackFrame* next_ebp;
+    uint32_t ebp;
 };
 
-void panic_message() {
+void panic_message(uint32_t ebp) {
     println("An error occurred: ");
 
     struct StackFrame* frame = 0;
     int i = 0;
 
-    asm("mov %%ebp, %0" : "=r"(frame));
+    if (!ebp) asm("mov %%ebp, %0" : "=r"(frame));
+    else frame = (struct StackFrame*) ebp;
 
-    while (frame->eip != 0) {
-        println("%i: %hu", i, frame->eip);
-        frame = frame->prev;
+    while (frame) {
+        println("%i: %hu", i, frame->ebp);
+        if (frame->next_ebp != frame) frame = frame->next_ebp;
+        else frame = 0;
         i++;
     }
 }
