@@ -1,5 +1,5 @@
-#include "include/console.h"
-#include "include/InterruptDescriptorTable.h"
+#include "console.h"
+#include "intr.h"
 #include <stdarg.h>
 #include <stdint.h>
 
@@ -108,7 +108,6 @@ void puts(const char * string)
             X_CURSOR_POS++; //X erhöhen
             if (X_CURSOR_POS >= 80) newLine(); //Wenn x größer als die max. Spalten dann neue Zeile
 	    }
-        displaycursor(X_CURSOR_POS, Y_CURSOR_POS);
 	}
 	if (Y_CURSOR_POS == 24) //Wenn ganz unten angekommen muss nach oben gescrollt werden.
 		scroll();
@@ -158,7 +157,6 @@ void putc(char c)
 
         X_CURSOR_POS++; //X erhöhen für den nächsten char
     }
-    displaycursor(X_CURSOR_POS, Y_CURSOR_POS);
     if (Y_CURSOR_POS == 24 || X_CURSOR_POS / 80 >= 24) //Wenn ganz unten angekommen muss nach oben gescrollt werden.
         scroll();
 }
@@ -178,8 +176,8 @@ void scroll(void)
 			video[x + 80 * y] = video[x + 80 * (y + 1)]; // alles eine zeile höher schieben
 		}
 	}
+    Y_CURSOR_POS--; //Y von 26 (außerhalb des Bildschirms) auf 25 setzten (neue zeile da alle zeilen auf eine darüber gesetzt wurden)
 	X_CURSOR_POS = 0; //X wieder auf zeilen anfang setzten
-	Y_CURSOR_POS--; //Y von 26 (außerhalb des Bildschirms) auf 25 setzten (neue zeile da alle zeilen auf eine darüber gesetzt wurden)
 }
 
 void getLine(char * line, int row) {

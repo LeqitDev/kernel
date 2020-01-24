@@ -5,7 +5,7 @@
 #ifndef TASKS_H
 #define TASKS_H
 
-#include "InterruptDescriptorTable.h"
+#include "intr.h"
 
 struct cpu_state* schedule(struct cpu_state* cpu);
 

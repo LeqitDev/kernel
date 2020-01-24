@@ -1,5 +1,5 @@
-#include "include/console.h"
-#include "include/commands.h"
+#include "console.h"
+#include "commands.h"
 
 void parseLine(const char * line, char * args[]) {
     int i = 0;
@@ -45,10 +45,11 @@ void proccedCommand(char * line) {
                 }
             }
         } else {
-            puts("Nutze ");
+            print("Nutze ");
             setTextColor(CONSOLE_COLOR_GREEN);
-            puts("echo [message]");
+            print("echo [message]");
         }
+        putc('\n');
     } else if (contains(args[0], "help")) {
         println("---------------------------------[Help]---------------------------------");
         println("- echo [message]                      | Schreibe etwas in die Konsole  -");

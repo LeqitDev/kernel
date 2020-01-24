@@ -1,5 +1,5 @@
-#include "include/console.h"
-#include "include/debug.h"
+#include "console.h"
+#include "debug.h"
 #include <stdint.h>
 
 

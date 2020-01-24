@@ -67,10 +67,20 @@ intr_common_handler:
     push %ebx
     push %eax
 
+    //Kernel-Datensegment
+    mov $0x10, %ax
+    mov %ax, %ds
+    mov %ax, %es
+
     // Handler aufrufen
     push %esp
     call handle_interrupt
-    add %eax, %esp
+    mov %eax, %esp
+
+    //User-Datensegment
+    mov $0x23, %ax
+    mov %ax, %ds
+    mov %ax, %es
 
     // CPU-Zustand wiederherstellen
     pop %eax

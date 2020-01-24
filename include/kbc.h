@@ -11,8 +11,6 @@
 #define KEY_CODE_TABULATOR 9
 #define KEY_CODE_ENTER     13
 
-extern uint8_t translate_scancode(int set, uint16_t scancode, int breakcode);
-
-extern char handle_keys(int keycode);
+void irq_handler();
 
 #endif //KBC_H

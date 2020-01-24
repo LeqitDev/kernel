@@ -1,10 +1,14 @@
-#include "include/InterruptDescriptorTable.h"
-#include "include/KBC.h"
-#include "include/commands.h"
-#include "include/console.h"
+#include "intr.h"
+#include "kbc.h"
+#include "commands.h"
+#include "console.h"
 #include <stdint.h>
 
 //TODO: Kommentare vervollständigen
+
+/*
+ * Prozess Keyboard Inputs
+ * */
 
 static void send_command(uint8_t command);
 void init_keyboard(void) {
@@ -110,9 +114,78 @@ char handle_keys(int keycode) {
         char Buff[80] = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
         getLine(Buff, Y_CURSOR_POS);
         proccedCommand(Buff);
-        character = '\n';
     }
     else if (keycode == KEY_CODE_BACKSPACE) character = '\b';
 
     return character;
+}
+
+
+/*
+ * Keyboard irq
+ * */
+
+void irq_handler() {
+    uint8_t scancode;
+    uint8_t keycode = 0;
+    int break_code = 0;
+
+    // Status-Variablen fuer das Behandeln von e0- und e1-Scancodes
+    static int     e0_code = 0;
+    // Wird auf 1 gesetzt, sobald e1 gelesen wurde, und auf 2, sobald das erste
+    // Datenbyte gelesen wurde
+    static int      e1_code = 0;
+    static uint16_t  e1_prev = 0;
+
+    scancode = inb(0x60);
+
+    // Um einen Breakcode handelt es sich, wenn das oberste Bit gesetzt ist und
+    // es kein e0 oder e1 fuer einen Extended-scancode ist
+    if ((scancode & 0x80) &&
+        (e1_code || (scancode != 0xE1)) &&
+        (e0_code || (scancode != 0xE0)))
+    {
+        break_code = 1;
+        scancode &= ~0x80;
+    }
+
+    if (e0_code) {
+        // Fake shift abfangen und ignorieren
+        if ((scancode == 0x2A) || (scancode == 0x36)) {
+            e0_code = 0;
+            return;
+        }
+
+        keycode = translate_scancode(1, scancode, break_code);
+        e0_code = 0;
+    } else if (e1_code == 2) {
+        // Fertiger e1-Scancode
+        // Zweiten Scancode in hoeherwertiges Byte packen
+        e1_prev |= ((uint16_t) scancode << 8);
+        keycode = translate_scancode(2, e1_prev, break_code);
+        e1_code = 0;
+    } else if (e1_code == 1) {
+        // Erstes Byte fuer e1-Scancode
+        e1_prev = scancode;
+        e1_code++;
+    } else if (scancode == 0xE0) {
+        // Anfang eines e0-Codes
+        e0_code = 1;
+    } else if (scancode == 0xE1) {
+        // Anfang eines e1-Codes
+        e1_code = 1;
+    } else {
+        // Normaler Scancode
+        keycode = translate_scancode(0, scancode, break_code);
+    }
+    // Zum Testen sollte folgendes verwendet werden:
+    if (!break_code) {
+        char buffer[64] = "XXX";
+        char character = handle_keys(keycode);
+        setBgColor(CONSOLE_COLOR_BLACK);
+        setTextColor(CONSOLE_COLOR_LIGHT_CYAN);
+        printf(buffer, "%c", character);
+        puts(buffer);
+    }
+    //Nach erfolgreichen Tests, könnte eine send_key_event Funtkion wie bei Týndur verwendet werden
 }

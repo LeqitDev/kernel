@@ -1,9 +1,5 @@
-//
-// Created by marku on 21.12.2019.
-//
-
-#ifndef INTERRUPTDESCRIPTORTABLE_H
-#define INTERRUPTDESCRIPTORTABLE_H
+#ifndef CCOS_INTR_H
+#define CCOS_INTR_H
 
 #include <stdint.h>
 
@@ -28,10 +24,12 @@ struct cpu_state {
     uint32_t   ss;
 };
 
-extern void outb(uint16_t port, uint8_t data);
+void init_gdt(void);
+void init_idt(void);
 
-extern unsigned char inb(uint16_t port);
+void outb(uint16_t port, uint8_t data);
+unsigned char inb(uint16_t port);
 
-extern void init_idt(void);
+struct cpu_state* handle_interrupt(struct cpu_state* cpu);
 
-#endif //INTERRUPTDESCRIPTORTABLE_H
+#endif //CCOS_INTR_H
