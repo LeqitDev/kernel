@@ -9,18 +9,18 @@ struct task {
     struct task* next_task;
 };
 
-static struct task* first_task = 0;
-static struct task* current_task = 0;
+static struct task* first_task = null;
+static struct task* current_task = null;
 
 void task_a(void) {
     while (1) {
-        println("a");
+        print("a");
     }
 }
 
 void task_b(void) {
     while (1) {
-        println("b");
+        print("b");
     }
 }
 
@@ -61,18 +61,10 @@ void init_multitasking(void) {
 }
 
 struct cpu_state* schedule(struct cpu_state* cpu) {
-    if (current_task != 0) {
-        current_task->cpu_state = cpu;
-    }
+    current_task->cpu_state = cpu;
 
-    if (current_task == 0) {
-        current_task = first_task;
-    } else {
-        current_task = current_task->next_task;
-        if (current_task == 0) {
-            current_task = first_task;
-        }
-    }
+    if (current_task->next_task == null) current_task = first_task;
+    else current_task = current_task->next_task;
 
     cpu = current_task->cpu_state;
 

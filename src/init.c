@@ -5,14 +5,14 @@
 
 void init(struct mb_info* mbInfo)
 {
-    init_pmm(mbInfo);
-
+    println("hi");
     clearScreen();
+
+    init_pmm(mbInfo);
 
     init_gdt();
     init_idt();
 
     init_multitasking();
-
     while (1);
 }

@@ -5,6 +5,8 @@
 #ifndef PMM_H
 #define PMM_H
 
+#define null ((void*) 0)
+
 struct mem_map {
     int size : 4;
     int baseaddr : 8;
@@ -19,10 +21,10 @@ struct mb_info {
     int mbs_bootdevice : 4;
     int mbs_cmdline : 4;
     int mbs_mods_count : 4;
-    int mbs_mods_addr : 4;
+    void* mbs_mods_addr;
     int mbs_syms : 16;
     int mbs_mmap_length : 4;
-    struct mem_map* mbs_mmap_addr;
+    void* mbs_mmap_addr;
 };
 
 void init_pmm(struct mb_info* mb_info);

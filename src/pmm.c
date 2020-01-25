@@ -4,6 +4,9 @@
 #define BITMAP_SIZE 32768
 static uint32_t bitmap[BITMAP_SIZE];
 
+extern const void kernel_start;
+extern const void kernel_end;
+
 void pmm_mark_used(void* page) {
     uintptr_t index = (uintptr_t) page / 4096;
     bitmap[index / 32] &= ~(1 << (index % 32));
@@ -14,7 +17,7 @@ void* pmm_alloc(void) {
         if (bitmap[i] != 0) {
             for (int j = 0; j < 32; j++) {
                 if (bitmap[i] & (1 << j)) {
-                    bitmap[i] &= (1 << j);
+                    bitmap[i] &= ~(1 << j);
                     return (void*) ((i * 32 + j) * 4096);
                 }
             }
@@ -44,9 +47,6 @@ void init_pmm(struct mb_info* mb_info) {
         }
         mmap++;
     }
-
-    extern const void kernel_start;
-    extern const void kernel_end;
 
     uintptr_t addr = (uintptr_t) &kernel_start;
     while (addr < (uintptr_t) &kernel_end) {
