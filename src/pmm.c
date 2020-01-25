@@ -1,4 +1,5 @@
 #include "pmm.h"
+#include "console.h"
 #include "stdint.h"
 
 #define BITMAP_SIZE 32768
@@ -7,7 +8,7 @@ static uint32_t bitmap[BITMAP_SIZE];
 extern const void kernel_start;
 extern const void kernel_end;
 
-void pmm_mark_used(void* page) {
+static void pmm_mark_used(void* page) {
     uintptr_t index = (uintptr_t) page / 4096;
     bitmap[index / 32] &= ~(1 << (index % 32));
 }
@@ -15,15 +16,17 @@ void pmm_mark_used(void* page) {
 void* pmm_alloc(void) {
     for (int i = 0; i < BITMAP_SIZE; i++) {
         if (bitmap[i] != 0) {
+            println("PMM_ALLOC");
             for (int j = 0; j < 32; j++) {
                 if (bitmap[i] & (1 << j)) {
                     bitmap[i] &= ~(1 << j);
+                    println("pmm_alloc: %b", ((i * 32 + j) * 4096));
                     return (void*) ((i * 32 + j) * 4096);
                 }
             }
         }
     }
-    return 0;
+    return null;
 }
 
 void pmm_free(void* page) {
@@ -33,7 +36,8 @@ void pmm_free(void* page) {
 
 void init_pmm(struct mb_info* mb_info) {
     struct mem_map* mmap = mb_info->mbs_mmap_addr;
-    struct mem_map* mmap_end = (void*) ((uintptr_t) mb_info->mbs_mmap_addr + mb_info->mbs_mmap_length);
+    struct mem_map* mmap_end = (void*)
+            ((uintptr_t) mb_info->mbs_mmap_addr + mb_info->mbs_mmap_length);
 
     while (mmap < mmap_end) {
         if (mmap->type == 1) {

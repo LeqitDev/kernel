@@ -247,6 +247,7 @@ struct cpu_state* handle_interrupt(struct cpu_state* cpu)
     } else {
         if (cpu->intr >= 0x20 && cpu->intr <= 0x2f) {
             if (cpu->intr == 0x20) {
+                print("schedule");
                 new_cpu = schedule(cpu);
                 tss[1] = (uint32_t) (new_cpu + 1);
             }
@@ -260,6 +261,7 @@ struct cpu_state* handle_interrupt(struct cpu_state* cpu)
             outb(0x20, 0x20);
         }
     }
+
     return new_cpu;
 }
 
