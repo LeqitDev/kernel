@@ -16,7 +16,6 @@ static void pmm_mark_used(void* page) {
 void* pmm_alloc(void) {
     for (int i = 0; i < BITMAP_SIZE; i++) {
         if (bitmap[i] != 0) {
-            println("PMM_ALLOC");
             for (int j = 0; j < 32; j++) {
                 if (bitmap[i] & (1 << j)) {
                     bitmap[i] &= ~(1 << j);
@@ -32,12 +31,16 @@ void* pmm_alloc(void) {
 void pmm_free(void* page) {
     uintptr_t index = (uintptr_t) page / 4096;
     bitmap[index / 32] |= (1 << (index % 32));
+//    println("bitmap[%i] = %b (bit changed: %b)", (index / 32), bitmap[index / 32], (1 << (index % 32)));
 }
 
 void init_pmm(struct mb_info* mb_info) {
     struct mem_map* mmap = mb_info->mbs_mmap_addr;
     struct mem_map* mmap_end = (void*)
             ((uintptr_t) mb_info->mbs_mmap_addr + mb_info->mbs_mmap_length);
+
+    /*println("mmap:\n \t %hu\n \t %i\n \t %i\n \t %i\n \t %i \n", mmap, mmap->type, mmap->length, mmap->baseaddr, mmap->size);
+    println("mmap_end:\n \t %hu\n \t %i\n \t %i\n \t %i\n \t %i", mmap_end, mmap_end->type, mmap_end->length, mmap_end->baseaddr, mmap_end->size);*/
 
     while (mmap < mmap_end) {
         if (mmap->type == 1) {

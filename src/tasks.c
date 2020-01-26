@@ -27,6 +27,7 @@ static void task_b(void) {
 struct task* init_task(void* entry) {
     uint8_t * stack = pmm_alloc();
     uint8_t * user_stack = pmm_alloc();
+
     struct cpu_state new_state = {
             .eax = 0,
             .ebx = 0,
@@ -61,15 +62,17 @@ void init_multitasking(void) {
 }
 
 struct cpu_state* schedule(struct cpu_state* cpu) {
-    current_task->cpu_state = cpu;
-
-    println(" | %i", current_task->next_task);
-
-    if (current_task->next_task == null) {
-        println("Yes its here %i, %i", first_task, (23294 / 0x1000));
-        current_task = first_task;
+    if (current_task != NULL) {
+        current_task->cpu_state = cpu;
     }
-    else current_task = current_task->next_task;
+    if (current_task == NULL) {
+        current_task = first_task;
+    } else {
+        current_task = current_task->next_task;
+        if (current_task == NULL) {
+            current_task = first_task;
+        }
+    }
 
     cpu = current_task->cpu_state;
 

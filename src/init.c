@@ -5,7 +5,6 @@
 
 void init(struct mb_info* mbInfo)
 {
-    println("hi");
     clearScreen();
 
     init_pmm(mbInfo);

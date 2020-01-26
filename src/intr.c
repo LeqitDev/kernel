@@ -227,12 +227,11 @@ void init_idt(void) {
 
 struct cpu_state* handle_interrupt(struct cpu_state* cpu)
 {
+//    println("Interrupt: %i", cpu->intr);
     struct cpu_state* new_cpu = cpu;
     if (cpu->intr <= 0x1f) {
         panic_message(cpu->ebp);
-        char buffer[64] = "X";
-        printf(buffer, "Exception %i, Kernel angehalten! [%i]\n", cpu->intr, cpu->error);
-        puts(buffer);
+        println("Exception %i, Kernel angehalten! [%i]\n", cpu->intr, cpu->error);
 
         println("cs: %i,\n eax: %i,\n ebp: %i,\n ebx: %i,\n ecx: %i,\n edi: %i,\n edx: %i,\n eip: %i,\n esi: %i,\n esp: %i,\n ss: %i,\n eflags: %i", cpu->cs, cpu->eax, cpu->ebp, cpu->ebx, cpu->ecx, cpu->edi, cpu->edx, cpu->eip, cpu->esi, cpu->esp, cpu->ss, cpu->eflags);
 
@@ -247,7 +246,6 @@ struct cpu_state* handle_interrupt(struct cpu_state* cpu)
     } else {
         if (cpu->intr >= 0x20 && cpu->intr <= 0x2f) {
             if (cpu->intr == 0x20) {
-                print("schedule");
                 new_cpu = schedule(cpu);
                 tss[1] = (uint32_t) (new_cpu + 1);
             }
