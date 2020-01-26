@@ -66,7 +66,7 @@ struct cpu_state* schedule(struct cpu_state* cpu) {
     println(" | %i", current_task->next_task);
 
     if (current_task->next_task == null) {
-        println("Yes its here %i", first_task);
+        println("Yes its here %i, %i", first_task, (23294 / 0x1000));
         current_task = first_task;
     }
     else current_task = current_task->next_task;
