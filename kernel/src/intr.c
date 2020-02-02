@@ -118,10 +118,22 @@ extern void intr_stub_16(void);
 extern void intr_stub_17(void);
 extern void intr_stub_18(void);
 
-extern void intr_stub_30(void);
-
 extern void intr_stub_32(void);
 extern void intr_stub_33(void);
+extern void intr_stub_34(void);
+extern void intr_stub_35(void);
+extern void intr_stub_36(void);
+extern void intr_stub_37(void);
+extern void intr_stub_38(void);
+extern void intr_stub_39(void);
+extern void intr_stub_40(void);
+extern void intr_stub_41(void);
+extern void intr_stub_42(void);
+extern void intr_stub_43(void);
+extern void intr_stub_44(void);
+extern void intr_stub_45(void);
+extern void intr_stub_46(void);
+extern void intr_stub_47(void);
 
 extern void intr_stub_48(void);
 
@@ -213,10 +225,22 @@ void init_idt(void) {
     set_idt_entry(17, (unsigned int) intr_stub_17, 0x8, 0x6, 1, 0x00, 1);
     set_idt_entry(18, (unsigned int) intr_stub_18, 0x8, 0x6, 1, 0x00, 1);
 
-    set_idt_entry(30, (unsigned int) intr_stub_30, 0x8, 0x6, 1, 0x00, 1);
-
     set_idt_entry(32, (unsigned int) intr_stub_32, 0x8, 0x6, 1, 0x00, 1);
     set_idt_entry(33, (unsigned int) intr_stub_33, 0x8, 0x6, 1, 0x00, 1);
+    set_idt_entry(34, (unsigned int) intr_stub_34, 0x8, 0x6, 1, 0x00, 1);
+    set_idt_entry(35, (unsigned int) intr_stub_35, 0x8, 0x6, 1, 0x00, 1);
+    set_idt_entry(36, (unsigned int) intr_stub_36, 0x8, 0x6, 1, 0x00, 1);
+    set_idt_entry(37, (unsigned int) intr_stub_37, 0x8, 0x6, 1, 0x00, 1);
+    set_idt_entry(38, (unsigned int) intr_stub_38, 0x8, 0x6, 1, 0x00, 1);
+    set_idt_entry(39, (unsigned int) intr_stub_39, 0x8, 0x6, 1, 0x00, 1);
+    set_idt_entry(40, (unsigned int) intr_stub_40, 0x8, 0x6, 1, 0x00, 1);
+    set_idt_entry(41, (unsigned int) intr_stub_41, 0x8, 0x6, 1, 0x00, 1);
+    set_idt_entry(42, (unsigned int) intr_stub_42, 0x8, 0x6, 1, 0x00, 1);
+    set_idt_entry(43, (unsigned int) intr_stub_43, 0x8, 0x6, 1, 0x00, 1);
+    set_idt_entry(44, (unsigned int) intr_stub_44, 0x8, 0x6, 1, 0x00, 1);
+    set_idt_entry(45, (unsigned int) intr_stub_45, 0x8, 0x6, 1, 0x00, 1);
+    set_idt_entry(46, (unsigned int) intr_stub_46, 0x8, 0x6, 1, 0x00, 1);
+    set_idt_entry(47, (unsigned int) intr_stub_47, 0x8, 0x6, 1, 0x00, 1);
 
     set_idt_entry(48, (unsigned int) intr_stub_48, 0x8, 0x6, 1, 0x00, 1);
 
