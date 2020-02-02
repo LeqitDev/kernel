@@ -34,6 +34,9 @@ intr_stub 16
 intr_stub_error_code 17
 intr_stub 18
 
+//syscall
+intr_stub 30
+
 // IRQs
 intr_stub 32
 intr_stub 33

@@ -118,6 +118,8 @@ extern void intr_stub_16(void);
 extern void intr_stub_17(void);
 extern void intr_stub_18(void);
 
+extern void intr_stub_30(void);
+
 extern void intr_stub_32(void);
 extern void intr_stub_33(void);
 
@@ -211,6 +213,8 @@ void init_idt(void) {
     set_idt_entry(17, (unsigned int) intr_stub_17, 0x8, 0x6, 1, 0x00, 1);
     set_idt_entry(18, (unsigned int) intr_stub_18, 0x8, 0x6, 1, 0x00, 1);
 
+    set_idt_entry(30, (unsigned int) intr_stub_30, 0x8, 0x6, 1, 0x00, 1);
+
     set_idt_entry(32, (unsigned int) intr_stub_32, 0x8, 0x6, 1, 0x00, 1);
     set_idt_entry(33, (unsigned int) intr_stub_33, 0x8, 0x6, 1, 0x00, 1);
 
@@ -218,6 +222,20 @@ void init_idt(void) {
 
     asm volatile("lidt %0" : : "m" (idtp));
     asm volatile("sti");
+}
+
+
+/*
+ * Syscalls
+ * */
+
+struct cpu_state* syscall(struct cpu_state* cpu) {
+    switch (cpu->eax) {
+        case 0:
+            print("%c", cpu->ebx);
+            break;
+    }
+    return cpu;
 }
 
 
@@ -257,6 +275,9 @@ struct cpu_state* handle_interrupt(struct cpu_state* cpu)
                 outb(0xa0, 0x20);
             }
             outb(0x20, 0x20);
+        }
+        if (cpu->intr == 0x30) {
+            syscall(cpu);
         }
     }
     return new_cpu;
