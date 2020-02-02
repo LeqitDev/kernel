@@ -67,8 +67,7 @@ void init_multitasking(struct mb_info* mb_info) {
         size_t length = module[0].mod_end - module[0].mod_start;
         void* load_addr = (void*) 0x200000;
 
-        memcpy(load_addr, (void*) module[0].mod_end, length);
-        println("Task at %iu", load_addr);
+        memcpy(load_addr, (void*) module[0].mod_start, length);
         init_task(load_addr);
     }
 }
