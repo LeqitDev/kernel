@@ -5,6 +5,7 @@
 #include "pmm.h"
 #include "multiboot.h"
 #include "string.h"
+#include "elf.h"
 
 struct task {
     struct cpu_state* cpu_state;
@@ -58,17 +59,38 @@ struct task* init_task(void* entry) {
     return task;
 }
 
+void init_elf(void* image) {
+    struct elf_header* header = image;
+    struct elf_program_header* ph;
+    int i;
+
+    if (header->magic != ELF_MAGIC) {
+        println("ERR(ELF loading): Keine gültige ELF-MAGIC!");
+        return;
+    }
+
+    ph = (struct elf_program_header*) (((char*) image) + header->ph_offset);
+    for (i = 0; i < header->ph_entry_count; i++, ph++) {
+        void* dest = (void*) ph->virt_addr;
+        void* src = ((char*) image) + ph->offset;
+
+        if (ph->type != 1) {
+            continue;
+        }
+
+        memset(dest, 0, ph->mem_size);
+        memcpy(dest, src, ph->file_size);
+    }
+    init_task((void*) header->entry);
+}
+
 void init_multitasking(struct mb_info* mb_info) {
     if (mb_info->mbs_mods_count == 0) {
         init_task(task_a);
         init_task(task_b);
     } else {
-        struct mb_modules* module = mb_info->mbs_mods_addr;
-        size_t length = module[0].mod_end - module[0].mod_start;
-        void* load_addr = (void*) 0x200000;
-
-        memcpy(load_addr, (void*) module[0].mod_start, length);
-        init_task(load_addr);
+        struct mb_modules* modules = mb_info->mbs_mods_addr;
+        init_elf((void*) modules[0].mod_start);
     }
 }
 

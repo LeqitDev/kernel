@@ -14,4 +14,4 @@ add_executable(
         kernel/src/include/pmm.h kernel/src/include/intr.h kernel/src/include/commands.h kernel/src/include/console.h kernel/src/include/debug.h kernel/src/include/kbc.h kernel/src/include/stdint.h kernel/src/include/tasks.h kernel/src/include/multiboot.h kernel/src/include/string.h kernel/src/include/stddef.h
         kernel/src/pmm.c kernel/src/intr.c kernel/src/commands.c kernel/src/console.c kernel/src/debug.c kernel/src/init.c kernel/src/kbc.c kernel/src/tasks.c
         user/src/init.c
-        user/src/include/stdint.h)
+        user/src/include/stdint.h kernel/src/include/elf.h)
