@@ -242,7 +242,7 @@ void init_idt(void) {
     set_idt_entry(46, (unsigned int) intr_stub_46, 0x8, 0x6, 1, 0x00, 1);
     set_idt_entry(47, (unsigned int) intr_stub_47, 0x8, 0x6, 1, 0x00, 1);
 
-    set_idt_entry(48, (unsigned int) intr_stub_48, 0x8, 0x6, 1, 0x60, 1);
+    set_idt_entry(48, (unsigned int) intr_stub_48, 0x8, 0x6, 1, 0x03, 1);
 
     asm volatile("lidt %0" : : "m" (idtp));
     asm volatile("sti");
