@@ -242,7 +242,7 @@ void init_idt(void) {
     set_idt_entry(46, (unsigned int) intr_stub_46, 0x8, 0x6, 1, 0x00, 1);
     set_idt_entry(47, (unsigned int) intr_stub_47, 0x8, 0x6, 1, 0x00, 1);
 
-    set_idt_entry(48, (unsigned int) intr_stub_48, 0x8, 0x6, 1, 0x00, 1);
+    set_idt_entry(48, (unsigned int) intr_stub_48, 0x8, 0x6, 1, 0x60, 1);
 
     asm volatile("lidt %0" : : "m" (idtp));
     asm volatile("sti");
@@ -269,7 +269,6 @@ struct cpu_state* syscall(struct cpu_state* cpu) {
 
 struct cpu_state* handle_interrupt(struct cpu_state* cpu)
 {
-//    println("Interrupt: %i", cpu->intr);
     struct cpu_state* new_cpu = cpu;
     if (cpu->intr <= 0x1f) {
         panic_message(cpu->ebp);
@@ -285,24 +284,21 @@ struct cpu_state* handle_interrupt(struct cpu_state* cpu)
             // Prozessor anhalten
             asm volatile("cli; hlt");
         }
-    } else {
-        if (cpu->intr >= 0x20 && cpu->intr <= 0x2f) {
-            if (cpu->intr == 0x20) {
-                new_cpu = schedule(cpu);
-                tss[1] = (uint32_t) (new_cpu + 1);
-            }
-            if (cpu->intr == 0x21) {
-                //IRQ
-                irq_handler();
-            }
-            if (cpu->intr >= 0x28) {
-                outb(0xa0, 0x20);
-            }
-            outb(0x20, 0x20);
+    } else if (cpu->intr >= 0x20 && cpu->intr <= 0x2f) {
+        if (cpu->intr == 0x20) {
+            new_cpu = schedule(cpu);
+            tss[1] = (uint32_t) (new_cpu + 1);
         }
-        if (cpu->intr == 0x30) {
-            syscall(cpu);
+        if (cpu->intr == 0x21) {
+            //IRQ
+            irq_handler();
         }
+        if (cpu->intr >= 0x28) {
+            outb(0xa0, 0x20);
+        }
+        outb(0x20, 0x20);
+    } else if (cpu->intr == 0x30) {
+        syscall(cpu);
     }
     return new_cpu;
 }
