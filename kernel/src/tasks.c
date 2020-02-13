@@ -2,7 +2,7 @@
 #include <stdint.h>
 #include "intr.h"
 #include "tasks.h"
-#include "pmm.h"
+#include "mm.h"
 #include "multiboot.h"
 #include "string.h"
 #include "elf.h"
@@ -90,7 +90,9 @@ void init_multitasking(struct mb_info* mb_info) {
         init_task(task_b);
     } else {
         struct mb_modules* modules = mb_info->mbs_mods_addr;
-        init_elf((void*) modules[0].mod_start);
+        for (int i = 0; i < mb_info->mbs_mods_count; i++) {
+            init_elf((void*) modules[i].mod_start);
+        }
     }
 }
 

@@ -18,7 +18,7 @@ void panic_message(uint32_t ebp) {
     else frame = (struct StackFrame*) ebp;
 
     while (frame) {
-        println("%i: %hu", i, frame->ebp);
+        println("%i: %h", i, frame->ebp);
         if (frame->next_ebp != frame) frame = frame->next_ebp;
         else frame = 0;
         i++;

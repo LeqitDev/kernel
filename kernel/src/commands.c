@@ -74,6 +74,22 @@ void proccedCommand(char * line) {
         int y = strtoint(args[2]);
         if (args[3] != 0) println("%s %i", args[3], x / y);
         else println("%i", x / y);
+    } else if (contains(args[0], "if")) {
+        if (contains(args[2], "equals")) {
+            int i = 3;
+            if (contains(args[1], args[3])) {
+                while (!contains(args[i++], "else") && args[i++] != 0) {
+                    print(args[i]);
+                }
+            } else {
+                while (contains(args[i++], "else") && args[i++] != 0) ;
+                i++;
+                while (args[++i] != 0) {
+                    println("%i", i);
+                    print(args[i]);
+                }
+            }
+        }
     } else {
         println("%s ist kein gueltiger Command.", args[0]);
         puts("Probiere ");

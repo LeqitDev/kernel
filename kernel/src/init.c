@@ -1,11 +1,13 @@
 #include "console.h"
 #include "intr.h"
 #include "tasks.h"
-#include <pmm.h>
+#include <mm.h>
 
 void init(struct mb_info* mbInfo)
 {
     clearScreen();
+
+    init_vmm();
 
     init_pmm(mbInfo);
 
