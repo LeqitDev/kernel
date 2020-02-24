@@ -7,9 +7,9 @@ void init(struct mb_info* mbInfo)
 {
     clearScreen();
 
-    init_vmm();
-
     init_pmm(mbInfo);
+
+    init_vmm();
 
     init_gdt();
     init_idt();

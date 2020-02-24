@@ -2,6 +2,7 @@
 #include "intr.h"
 #include <stdarg.h>
 #include <stdint.h>
+#include "debug.h";
 
 struct __attribute__((packed)) VideoChar { char c; char color; }; //Videochar struct um text einfacher zum *wirklichen* Videochar hinzuzufügen
 
@@ -518,6 +519,18 @@ void println(char const * fmt, ...) {
     genprintf(stringPutc, &writer, fmt, vaList);
     va_end(vaList);
     puts(buffer);
+    putc('\n');
+}
+
+void println_serial(char const * fmt, ...) {
+    init_seriell();
+    va_list vaList;
+    va_start(vaList, fmt);
+    char buffer[80] = "X";
+    StringPutBuffer writer = { buffer, 0 };
+    genprintf(stringPutc, &writer, fmt, vaList);
+    va_end(vaList);
+    print_seriell(buffer);
     putc('\n');
 }
 

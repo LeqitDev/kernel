@@ -47,6 +47,7 @@ extern int signedToString(char * buffer, size_t length, signed long long num, in
 extern void kprintf(void (*put)(void * ctx, char c), void * ctx, char const * fmt, ...);
 extern void printf(char * buffer, char const * fmt, ...);
 extern void println(char const * fmt, ...);
+void println_serial(char const * fmt, ...);
 extern void print(char const * fmt, ...);
 
 #endif

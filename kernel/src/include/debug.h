@@ -8,5 +8,7 @@
 #include <stdint.h>
 
 void panic_message(uint32_t ebp);
+void init_seriell(void);
+void print_seriell(const char * str);
 
 #endif //DEBUG_H

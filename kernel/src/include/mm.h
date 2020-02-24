@@ -6,6 +6,7 @@
 #define PMM_H
 
 #include "multiboot.h"
+#include "stdint.h"
 
 #define null ((void*) 0)
 
@@ -18,7 +19,7 @@ void* pmm_alloc(void);
 #define PTE_USER    0x4
 
 struct vmm_context {
-    int* pagedir;
+    uint32_t * pagedir;
 };
 void init_vmm(void);
 

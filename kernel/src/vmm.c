@@ -25,6 +25,7 @@ int vmm_map_page(struct vmm_context* context, uintptr_t virt, uintptr_t phys) {
 
     page_table[pt_index] = phys | PTE_PRESENT | PTE_WRITE | PTE_USER;
     asm volatile("invlpg %0" : : "m" (*(char*)virt));
+    return 0;
 }
 
 void vmm_activate_context(struct vmm_context* context) {
