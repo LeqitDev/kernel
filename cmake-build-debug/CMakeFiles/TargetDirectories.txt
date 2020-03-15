@@ -1,0 +1,3 @@
+E:/ProgrammierProjekte/Assembler/OS/CCOS/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+E:/ProgrammierProjekte/Assembler/OS/CCOS/cmake-build-debug/CMakeFiles/CCOS.dir
+E:/ProgrammierProjekte/Assembler/OS/CCOS/cmake-build-debug/CMakeFiles/edit_cache.dir
