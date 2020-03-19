@@ -1,6 +1,132 @@
 <!DOCTYPE html>
 <html lang="en">
-    <body>
-        <p>HI</p>
-    </body>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>
+        LeqitDev | Projects | CCOS
+    </title>
+    <link rel="stylesheet" href="https://bootswatch.com/4/sketchy/bootstrap.min.css">
+    <!--        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">-->
+    <script src="https://kit.fontawesome.com/650e708ee9.js" crossorigin="anonymous"></script>
+    <link rel="icon" href="https://leqitdev.github.io/assets/logo.png">
+</head>
+<body>
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">LeqitDev</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item dropright">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Projects
+                        </a>
+                        <div class="dropdown-menu bg-light" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item active" href="/kernel" data-toggle="tooltip" data-placement="right" title="C kernel">CCOS</a>
+                            <a class="dropdown-item" href="#" data-toggle="tooltip" data-placement="right" title="IRC library in Java">IRC Lib</a>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="contactmelink" data-toggle="modal" data-target="#contactmemodal" data-whatever="@leqitdev">Contact Me</a>
+                    </li>
+                </ul>
+                <a class="btn btn-git btn-secondary" href="https://github.com/LeqitDev" data-toggle="tooltip" data-placement="down" title="My Github profile"><i class="fab fa-github pr-1"></i> Github</a>
+            </div>
+        </div>
+    </nav>
+</header>
+<main>
+
+    <div class="modal fade" id="contactmemodal" tabindex="-1" role="dialog" aria-labelledby="contactmelink" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Send me an email:</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="http://leqitdev-processing.ddns.net/html/webapps/contactme.php" id="mailform">
+                        <input type="hidden" name="form" id="url">
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">From:</label>
+                            <input type="text" class="form-control" id="recipient-name" name="name" placeholder="Your name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email" class="col-form-label">Your email:</label>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="Your email address" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message-text" class="col-form-label">Message:</label>
+                            <textarea class="form-control" id="message-text" name="message" placeholder="Your message..." required></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" form="mailform" class="btn btn-primary">Send message</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mt-4">
+        <div class="pt-5 pb-5">
+            <div class="pb-3">
+                <h1 class="text-center text-dark pt-0 mt-0 mb-3 font-weight-bold">CCOS</h1>
+                <p class="text-center text-secondary">CCOS(CubeCoder['s]OperatingSystem) is a 32-Bit operating system for intel cpus. <br> On this page you can find information's about this project</p>
+            </div>
+<!--            <div class="text-center">-->
+<!--                <a class="btn btn-primary text-light m-2" href="#info">Information's</a>-->
+<!--                <a class="btn btn-primary m-2" href="#credits">Credits</a>-->
+<!--            </div>-->
+        </div>
+        <div class="pt-5 pb-5">
+            <div class="pb-2">
+                <h3 class="text-center font-weight-bold" id="info">Information's</h3>
+                <p class="text-center pt-3">
+                    This project started around the beginning of the year. <br>
+                    First I began to write the code in assembly but after a while I switched to C because C is easily to understand in contrast to assembly. <br>
+                    So first of all I created the main parts like text output for debugging, GDT/IDT and IRQs. <br>
+                    After a few lines of codes or evan more I created a KeyboardController so I can write with the keyboard. <br>
+                    Then I programmed multitasking so the tasks can run side by side. <br>
+                    Because the tasks access the same memory I have to include paging. <br>
+                    The kernel can also load external program's as a task.
+                </p>
+            </div>
+        </div>
+        <div class="pt-5 pb-5">
+            <h3 class="text-center font-weight-bold" id="credits">Credits</h3>
+            <p class="text-center pt-3">
+                Credits go out to IRC #lost on irc.euirc.net. <br>
+                Especially to the member xq there. <br>
+                Without their help I wouldn't have got so far. <br>
+                Thanks
+            </p>
+        </div>
+    </div>
+</main>
+<hr>
+<footer class="footer bg-light py-3">
+    <div class="container">
+        <p class="text-center">&copy Markus Hamacher 2020 | <a class="text-secondary" href="impressum.html">Impressum</a></p>
+    </div>
+</footer>
+<!--    JS stuff-->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script type="text/javascript">
+    var urlInput = document.getElementById("url");
+    urlInput.value = document.URL;
+</script>
+</body>
 </html>
