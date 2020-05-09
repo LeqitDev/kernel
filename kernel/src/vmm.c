@@ -1,9 +1,12 @@
 #include "mm.h"
 #include "stdint.h"
+#include "console.h"
 
 static struct vmm_context* kernelcontext;
 
 int vmm_map_page(struct vmm_context* context, uintptr_t virt, uintptr_t phys) {
+    println("V: %iu, P: %iu, Context: %iu", virt, phys, context);
+
     uint32_t page_index = virt / 0x1000;
     uint32_t pd_index = page_index / 1024;
     uint32_t pt_index = page_index % 1024;
@@ -20,7 +23,7 @@ int vmm_map_page(struct vmm_context* context, uintptr_t virt, uintptr_t phys) {
         for (i = 0; i < 1024; i++) {
             page_table[i] = 0;
         }
-        context->pagedir[pd_index] = (uint32_t) page_table | PTE_PRESENT | PTE_WRITE | PTE_USER;
+        context->pagedir[pd_index] = (uint32_t) page_table | PTE_PRESENT | PTE_WRITE;
     }
 
     page_table[pt_index] = phys | PTE_PRESENT | PTE_WRITE | PTE_USER;
@@ -56,7 +59,7 @@ void init_vmm(void) {
 
     vmm_activate_context(kernelcontext);
 
-    asm("mov %%cr0, %0" : "=r" (cr0));
+    asm ("mov %%cr0, %0" : "=r" (cr0));
     cr0 |= (1 << 31);
-    asm("mov %0, %%cr0" : : "r" (cr0));
+    asm ("mov %0, %%cr0" : : "r" (cr0));
 }

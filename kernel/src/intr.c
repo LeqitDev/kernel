@@ -32,7 +32,7 @@ static uint32_t tss[32] = {0, 0, 0x10};
 #define GDT_FLAG_4K_GRAN 0x800
 #define GDT_FLAG_32_BIT  0x400
 
-#define GDT_ENTRIES 6 //anzahl der einträge die in der gdt sind
+#define GDT_ENTRIES 5 //anzahl der einträge die in der gdt sind
 
 static uint64_t gdt[GDT_ENTRIES]; //gdt[-table] erstellen
 
@@ -71,8 +71,8 @@ void init_gdt(void) {
     set_gdt_entry(4, 0, 0xfffff,
             GDT_FLAG_SEGMENT | GDT_FLAG_32_BIT |
             GDT_FLAG_DATASEG | GDT_FLAG_4K_GRAN | GDT_FLAG_PRESENT | GDT_FLAG_RING3); //fünfter eintrag, datasegment im user-space (ring 3)
-    set_gdt_entry(5, (uint32_t) tss, sizeof(tss),
-            GDT_FLAG_TSS | GDT_FLAG_PRESENT | GDT_FLAG_RING3);
+    /*set_gdt_entry(5, (uint32_t) tss, sizeof(tss),
+            GDT_FLAG_TSS | GDT_FLAG_PRESENT | GDT_FLAG_RING3);*/
 
     asm volatile("lgdt %0" : : "m" (gdtp)); //gdt setzten bzw. zu aktivieren
 
@@ -86,7 +86,7 @@ void init_gdt(void) {
     "mov %ax, %ss"
     );
 
-    asm volatile("ltr %%ax" : : "a" (5 << 3));
+//    asm volatile("ltr %%ax" : : "a" (5 << 3));
 }
 
 

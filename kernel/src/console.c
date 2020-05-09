@@ -2,7 +2,7 @@
 #include "intr.h"
 #include <stdarg.h>
 #include <stdint.h>
-#include "debug.h";
+#include "debug.h"
 
 struct __attribute__((packed)) VideoChar { char c; char color; }; //Videochar struct um text einfacher zum *wirklichen* Videochar hinzuzufügen
 
@@ -258,7 +258,7 @@ int strtoint(char * string) {
 int unsignedToString(char * buffer, size_t length, unsigned long long num, int base)
 {
     //unsigned funktion: Minuswerte nicht mitinbegriffen: nur positive Werte
-    if (base < 2 && base > 16)
+    if (base < 2 || base > 16)
     {
         //wenn base kleiner als binär oder größer als hexadecimal ist wird die funktion direkt abgebrochen
         return -1;
