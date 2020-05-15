@@ -24,7 +24,7 @@ void parseLine(const char * line, char * args[]) {
     }
 }
 
-int argslen(char * args[], int maxlength) {
+int argsLen(char * args[], int maxlength) {
     int len = 0;
     for (int i = 0; i < maxlength; i++) {
         if (args[i] != 0) len++;
@@ -32,7 +32,7 @@ int argslen(char * args[], int maxlength) {
     return len;
 }
 
-void proccedCommand(char * line) {
+void proceedCommand(char * line) {
     putc('\n');
     char * args[80] = {"XXXX"};
     parseLine(line, args);

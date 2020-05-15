@@ -5,6 +5,6 @@
 #ifndef COMMANDS_H
 #define COMMANDS_H
 
-extern void proccedCommand(char * line);
+extern void proceedCommand(char * line);
 
 #endif //COMMANDS_H

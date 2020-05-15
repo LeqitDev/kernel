@@ -45,7 +45,7 @@ pub fn build(b: *std.build.Builder) !void {
         "-no-shutdown",
         "-no-reboot",
         "-d",
-        "int",
+        "in_asm",
         "-s",
         "-kernel",
     });

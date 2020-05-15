@@ -113,7 +113,7 @@ char handle_keys(int keycode) {
     else if (keycode == KEY_CODE_ENTER) {
         char Buff[80] = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
         getLine(Buff, Y_CURSOR_POS);
-        proccedCommand(Buff);
+        proceedCommand(Buff);
     }
     else if (keycode == KEY_CODE_BACKSPACE) character = '\b';
 

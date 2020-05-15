@@ -1,11 +1,11 @@
-#include "console.h"
+//#include "console.h"
 #include "intr.h"
 #include "tasks.h"
 #include <mm.h>
 
 void init(struct mb_info* mbInfo)
 {
-    clearScreen();
+    //clearScreen();
 
     //init_pmm(mbInfo);
 
@@ -15,5 +15,6 @@ void init(struct mb_info* mbInfo)
     //init_idt();
 
     //init_multitasking(mbInfo);
+    //puts("Hi");
     while (1);
 }
